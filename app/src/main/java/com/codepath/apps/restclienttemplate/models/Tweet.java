@@ -24,6 +24,7 @@ public class Tweet {
     public static final String tag = "Post";
     public String id;
     public String rtStatus;
+    public String likeStatus;
 
     public Tweet(){} //req by parcel
 
@@ -39,6 +40,7 @@ public class Tweet {
         Log.e(tag, "Date: "+ tweet.jsonDate);
         tweet.id = jsonObject.getString("id");
         tweet.rtStatus = jsonObject.getString("retweeted");
+        tweet.likeStatus = jsonObject.getString("favorited");
         if(entities.has("media")){ //if there's an image
             JSONArray media = entities.getJSONArray("media");
             JSONObject trueMedia = media.getJSONObject(0);

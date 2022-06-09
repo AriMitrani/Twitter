@@ -77,20 +77,63 @@ public class TimelineActivity extends AppCompatActivity {
                 }
                 else if(button == "retweet"){
                     Log.e(TAG, "Rtweeting: " + tweets.get(position).id);
-                    client.rtTweet(tweets.get(position).id, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Headers headers, JSON json) {
-                            Log.e(TAG, "Rtweeted");
-                        }
+                    if (tweets.get(position).rtStatus == "false"){
+                        client.rtTweet(tweets.get(position).id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.e(TAG, "Rtweeted");
+                                tweets.get(position).rtStatus = "true";
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                            Log.e(TAG, "Failed to RT");
-                        }
-                    });
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "Failed to RT");
+                            }
+                        });
+                    } else {
+                        client.UndoRtTweet(tweets.get(position).id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.e(TAG, "UNRtweeted");
+                                tweets.get(position).rtStatus = "false";
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "Failed to UNRT");
+                            }
+                        });
+                    }
                 }
                 else if(button == "like"){
                     Log.e(TAG, "Liking post by : " + tweets.get(position).user.screenName);
+                    if (tweets.get(position).likeStatus == "false"){
+                        client.likeTweet(tweets.get(position).id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.e(TAG, "Liked");
+                                tweets.get(position).likeStatus = "true";
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "Failed to Like");
+                            }
+                        });
+                    } else {
+                        client.unlikeTweet(tweets.get(position).id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.e(TAG, "UNLiked");
+                                tweets.get(position).likeStatus = "false";
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e(TAG, "Failed to UNLike");
+                            }
+                        });
+                    }
                 }
                 else if(button == "row"){
                     Log.e(TAG, "Opening expanded view: " + tweets.get(position).user.screenName);

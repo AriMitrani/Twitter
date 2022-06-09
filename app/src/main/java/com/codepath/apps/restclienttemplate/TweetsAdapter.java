@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.parceler.Parcel;
@@ -82,7 +83,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.myViewHold
         TimelineActivity tl = new TimelineActivity();
         private Button replyButton;
         private Button retweetButton;
-        private CheckBox likeButton;
+        private Button likeButton;
         private WeakReference<TimelineActivity.ClickListener> listenerRef;
 
         public myViewHolder(final View itemView, TimelineActivity.ClickListener listener) {
@@ -111,20 +112,25 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.myViewHold
             tvUser.setText("@" + tweet.user.screenName);
             timeStamp.setText("• " +getRelativeTimeAgo(tweet.jsonDate));
             if(tweet.rtStatus == "true"){
-                retweetButton.setText("a");
+                retweetButton.setBackgroundResource(R.drawable.bluert);
             }
             else{
-                retweetButton.setText("x");
+                retweetButton.setBackgroundResource(R.drawable.blkrt);
             }
-            Glide.with(context).load(tweet.user.imageUrl).into(ivProfilePic);
-            if(tweet.hasMedia){
+            if(tweet.likeStatus == "true"){
+                likeButton.setBackgroundResource(R.drawable.liked);
+            }
+            else{
+                likeButton.setBackgroundResource(R.drawable.notliked);
+            }
+            Glide.with(context).load(tweet.user.imageUrl).apply(RequestOptions.circleCropTransform()).into(ivProfilePic);
+            if (tweet.hasMedia) {
                 ivMedia.setVisibility(View.VISIBLE);
                 Glide.with(context).load(tweet.mediaUrl).into(ivMedia);
-                Log.e(tag, "Image showing. URL: "+ tweet.mediaUrl);
-            }
-            else{
+                Log.e(tag, "Image showing. URL: " + tweet.mediaUrl);
+            } else {
                 ivMedia.setVisibility(View.GONE);
-                Log.e(tag, "Image gone. URL: "+ tweet.mediaUrl);
+                Log.e(tag, "Image gone. URL: " + tweet.mediaUrl);
             }
 
 
@@ -139,11 +145,22 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.myViewHold
                 button = "reply";
             }
             else if (v.getId() == retweetButton.getId()) {
+
                 //Toast.makeText(v.getContext(), "Retweet", Toast.LENGTH_SHORT).show();
+                if (tweets.get(getAdapterPosition()).rtStatus == "false"){
+                    retweetButton.setBackgroundResource(R.drawable.bluert);
+                } else {
+                    retweetButton.setBackgroundResource(R.drawable.blkrt);
+                }
                 button = "retweet";
             }
             else if (v.getId() == likeButton.getId()) {
                 //Toast.makeText(v.getContext(), "Like", Toast.LENGTH_SHORT).show();
+                if (tweets.get(getAdapterPosition()).likeStatus == "false"){
+                    likeButton.setBackgroundResource(R.drawable.liked);
+                } else {
+                    likeButton.setBackgroundResource(R.drawable.notliked);
+                }
                 button = "like";
             }
             else {
