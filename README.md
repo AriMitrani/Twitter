@@ -46,7 +46,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![Screen Recording 2022-06-10 at 1 22 36 PM](https://user-images.githubusercontent.com/62488981/173145037-a5c253d9-3caf-4287-a5f0-86f66ead9121.gif)
 
 ## Notes
 
